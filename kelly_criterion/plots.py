@@ -1,8 +1,10 @@
 import altair as alt
 import numpy as np
 import pandas as pd
+from tqdm import tqdm_notebook as tqdm
 
 EPSILON = 1e-8
+
 
 def plot_func(func, *, x_lower=EPSILON, x_upper=1-EPSILON, num_points=1000):
     xs = np.linspace(x_lower, x_upper, num=num_points)
@@ -23,29 +25,40 @@ def plot_func(func, *, x_lower=EPSILON, x_upper=1-EPSILON, num_points=1000):
     )
 
 
-def plot_sampled_func(func, sampler, *, x_lower=EPSILON, x_upper=1-EPSILON, num_points=1000, num_samples=10, sample_size=1000):
+def plot_sampled_func(
+    func, sampler, *,
+    x_lower=EPSILON,
+    x_upper=1-EPSILON,
+    num_points=1000,
+    num_func_samples=10, 
+    across_sample_sizes=[10, 100, 1000]
+):
     xgrid = list(np.linspace(x_lower, x_upper, num=num_points))
 
+    sample_sizes = []
     instances = []
     xs = []
     fs = []
-    for i in range(num_samples):
-        samples = sampler(sample_size)
-        instances += [i for j in range(num_points)]
-        xs += xgrid
-        fs += [func(x, samples=samples) for x in xgrid]
+    for sample_size in tqdm(across_sample_sizes, desc="sample_size", leave=False):
+        for i in tqdm(range(num_func_samples), desc="func_sample", leave=False):
+            samples = sampler(sample_size)
+            sample_sizes += [sample_size] * num_points
+            instances += [i] * num_points
+            xs += xgrid
+            fs += [func(x, samples=samples) for x in xgrid]
     
     alt.data_transformers.disable_max_rows()
 
     return (
         alt
         .Chart(
-            pd.DataFrame({"instance": instances, "x": xs, "func": fs})
+            pd.DataFrame({"sample_size": sample_sizes, "instance": instances, "x": xs, "func": fs})
         )
         .mark_line()
         .encode(
             x="x",
             y="func",
+            column="sample_size:O",
             detail="instance",
             opacity=alt.value(0.2),
         )
