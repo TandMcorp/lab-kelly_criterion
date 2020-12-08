@@ -1,2 +1,4 @@
 altair
+matplotlib
+numpy
 scipy
