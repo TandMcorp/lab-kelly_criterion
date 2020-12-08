@@ -14,6 +14,7 @@ defusedxml==0.6.0
 entrypoints==0.3
 idna==2.10
 ipykernel==5.3.4
+ipympl==0.5.8
 ipython==7.19.0
 ipython-genutils==0.2.0
 ipywidgets==7.5.1
@@ -26,7 +27,7 @@ jupyter-core==4.7.0
 jupyterlab==2.2.9
 jupyterlab-pygments==0.1.2
 jupyterlab-server==1.2.0
--e git+git@github.com:mgh35/lab-kelly_criterion.git@ce074f25547c7f34595fb524d314b62be3b331f1#egg=kelly_criterion
+-e git+git@github.com:mgh35/lab-kelly_criterion.git@8e30e40a05e7f0d635fe50c7dea10f634b260657#egg=kelly_criterion
 kiwisolver==1.3.1
 MarkupSafe==1.1.1
 matplotlib==3.3.3

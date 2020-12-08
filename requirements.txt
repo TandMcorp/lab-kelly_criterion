@@ -1,4 +1,5 @@
 altair
+ipympl
 matplotlib
 numpy
 scipy
